@@ -65,4 +65,4 @@ with open('result.csv', 'w', newline='') as file:
         writer.writerow(["appname","genre","ratings"])
 wricsv(appname,genre,star)
 simapps(soup,list1,c)
-# simapps=soup.find("a", {"class": "poRVub"})
+
