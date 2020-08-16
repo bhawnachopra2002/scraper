@@ -4,22 +4,7 @@ import time
 from bs4 import BeautifulSoup
 from html.parser import HTMLParser
 import csv
-# # url = 'https://play.google.com/store/apps/details?id=in.amazon.mShop.android.shopping'
-# # url="https://play.google.com/store/apps/collection/cluster?clp=ogoKCAEqAggBUgIIAQ%3D%3D:S:ANO1ljJG6Aw&gsr=Cg2iCgoIASoCCAFSAggB:S:ANO1ljLKNqE"
-# # url="https://play.google.com/store/apps"
-# response = requests.get(url)
-# soup = BeautifulSoup(response.text, 'html.parser')
-# mylist = soup.findAll("div", {"class": "W9yFB"})
-# c=0
-# for i in mylist:
-#     a=i.contents[0]
-#     url1="https://play.google.com"+a['href']
-#     response1 = requests.get(url1)
-#     soup1 = BeautifulSoup(response1.text, 'html.parser')
-#     mylist1 = soup1.findAll("a", {"class": "poRVub"})
-#     for j in mylist1:
-#         url2="https://play.google.com"+j['href']
-#         c=c+1
+
 def wricsv(a,b,c):
     with open('result.csv', 'w', newline='') as file:
         writer = csv.writer(file)
