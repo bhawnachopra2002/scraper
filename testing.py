@@ -2,7 +2,8 @@ import requests
 import urllib.request
 import time
 from bs4 import BeautifulSoup
-start=time.asctime( time.localtime(time.time()) )
+from multiprocessing.pool import ThreadPool
+start_time=time.time()
 categorylist=['ART_AND_DESIGN','AUTO_AND_VEHICLES','BEAUTY','BOOKS_AND_REFERENCE','BUSINESS','COMICS',		
 'COMMUNICATION',	
 'DATING','EDUCATION',		
@@ -54,6 +55,11 @@ def findit(soup,j):
     appname=app1[j].string
     r=soup.find_all('div',class_="pf5lIe")
     return link,appname,r
+
+linklist=[] # app urls
+applist=[] # app names
+lf=[] 
+count=0  # app details
 for i in categorylist:
     url="https://play.google.com/store/apps/category/"+i
     print(url)
@@ -61,10 +67,6 @@ for i in categorylist:
     soup = BeautifulSoup(response.text, 'lxml')
     mylist = soup.find_all('div',class_="Vpfmgd",limit=None) #list of apps on page of category
     c=len(mylist)
-    linklist=[] # app urls
-    applist=[] # app names
-    lf=[]   # app details
-    count=0
     for j in range(c):
         link,appname,r=findit(soup,j)
         if appname not in applist:
@@ -80,32 +82,34 @@ for i in categorylist:
             # print(appname,genre,rating)
         else:
             continue
-        # finding similar apps to all apps in applist  
-    for k in set(linklist):
-        response = requests.get(k)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        list1=soup.find_all('div',class_="b8cIId ReQCgd Q9MA7b")
-        for j in list1:
-            k=j.contents[0]
-            link=k['href']  #url of similar app
-            appname=k.contents[0]['title']
-            if appname not in applist:         
-                response = requests.get("https://play.google.com"+link)
-                soup = BeautifulSoup(response.text, 'lxml')
-                stars=soup.findAll("div",{"class": "BHMmbe"})
-                try:
-                    rating=stars[0].string
-                except:
-                    rating="No ratings"
-                mylinks = soup.findAll("a", {"class": "hrTbp R8zArc"})
-                try:
-                    genre=mylinks[1].string
-                except:
-                    genre="No genre"
-                lf.append([appname,genre,rating])
-                print(appname,genre,rating)
-                count=count+1
-                
+print("--- %s seconds ---" % (time.time() - start_time))
+# finding similar apps to all apps in applist  
+for k in linklist:
+    response = requests.get(k)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    list1=soup.find_all('div',class_="b8cIId ReQCgd Q9MA7b")
+    for j in list1:
+        k=j.contents[0]
+        link=k['href']  #url of similar app
+        appname=k.contents[0]['title']
+        if appname not in applist:         
+            response = requests.get("https://play.google.com"+link)
+            soup = BeautifulSoup(response.text, 'lxml')
+            stars=soup.findAll("div",{"class": "BHMmbe"})
+            try:
+                rating=stars[0].string
+            except:
+                rating="No ratings"
+            mylinks = soup.findAll("a", {"class": "hrTbp R8zArc"})
+            try:
+                genre=mylinks[1].string
+            except:
+                genre="No genre"
+            lf.append([appname,genre,rating])
+            # print(appname,genre,rating)
+            count=count+1
+            print(count)        
+print("--- %s seconds ---" % (time.time() - start_time))
 print(len(lf))
 print(lf[:])
 
