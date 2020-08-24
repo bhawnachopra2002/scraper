@@ -69,8 +69,8 @@ for i in categorylist:
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')
     mylist = soup.find_all('div',class_="W9yFB",limit=None) #the urls of the pages when we click see more button on category page.
-    for j in mylist:
-        link="https://play.google.com"+j.contents[0]['href']
+    for m in mylist:
+        link="https://play.google.com"+m.contents[0]['href']
         # print(link)
         response = requests.get(link)
         soup = BeautifulSoup(response.text, 'lxml')
@@ -92,6 +92,6 @@ for i in categorylist:
                 # print(appname,genre,rating)
             else:
                 continue
+                
         print(len(lf))
-        
 print("--- %s seconds ---" % (time.time() - start_time))
