@@ -93,5 +93,33 @@ for i in categorylist:
             else:
                 continue
                 
-        print(len(lf))
+print(len(lf))
+for k in linklist:
+    response = requests.get(k)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    list_sim=soup.find_all('div',class_="b8cIId ReQCgd Q9MA7b") #div containing similar apps
+    for j in list_sim:
+        k=j.contents[0]
+        link=k['href']  #url of similar app
+        appname=k.contents[0]['title']
+        if appname not in applist:         
+            response = requests.get("https://play.google.com"+link)
+            soup = BeautifulSoup(response.text, 'lxml')
+            stars=soup.findAll("div",{"class": "BHMmbe"}) #div containing rating
+            try:
+                rating=stars[0].string
+            except:
+                rating="No ratings"
+            mylinks = soup.findAll("a", {"class": "hrTbp R8zArc"}) #div containg genre
+            try:
+                genre=mylinks[1].string
+            except:
+                genre="No genre"
+            lf.append([appname,genre,rating]) #appending etails of each similar app to final list.
+            # print(appname,genre,rating)
+            count=count+1
+    if count>100000: #max no of apps to be scraped
+        break
+print(len(lf))
+#print(lf[:])
 print("--- %s seconds ---" % (time.time() - start_time))
