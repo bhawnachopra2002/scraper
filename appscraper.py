@@ -1,5 +1,5 @@
-'''first the get request foe each category page is sent and then the apps in the page of see more button are scraped for each category.
-After scraping all apps bfs technique is used to scrape similar apps'''
+'''first the get request for each category page is sent and then the apps in the page of see more button are scraped for each category.
+After scraping all apps BFS graph theory technique is used to scrape similar apps'''
 import requests
 import urllib.request
 import time
